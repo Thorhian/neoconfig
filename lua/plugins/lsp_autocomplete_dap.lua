@@ -188,9 +188,9 @@ end
 -- CMP/Luasnip Conifiguration -----------------------------
 
 local cmp_setup = function()
-   local cmp = require("cmp")
    local luasnip = require("luasnip")
-   return {
+   local cmp = require("cmp")
+   cmp.setup({
       snippet = {
          expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -229,8 +229,7 @@ local cmp_setup = function()
          { name = 'neorg' },
          { name = 'path' },
       },
-   }
-
+   })
 end
 
 return {
