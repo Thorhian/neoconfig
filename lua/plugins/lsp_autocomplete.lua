@@ -251,7 +251,6 @@ return {
    { "hrsh7th/cmp-nvim-lsp" },
    { "saadparwaiz1/cmp_luasnip" },
    { "L3MON4D3/LuaSnip" },
-   { "mfussenegger/nvim-dap" },
    {
       "williamboman/mason.nvim",
       init = function()
