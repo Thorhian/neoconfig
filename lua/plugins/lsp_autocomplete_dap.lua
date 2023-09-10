@@ -1,30 +1,31 @@
 -- LSP/AutoCompletion & DAP -------------------------------
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-        update_in_insert = true,
-    }
-)
+local lsp_setup = function()
+   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics, {
+         update_in_insert = true,
+      }
+   )
 
-local os_type = vim.loop.os_uname().sysname
-local homeDir = os.getenv("HOME")
-local dataDir = vim.fn.stdpath("data")
-local masonPackageLoc = dataDir .. '/mason/packages'
-local omnisharp_loc = ""
-if os_type == "Windows_NT" then
-    print("Config is loading on windows.")
-    homeDir = os.getenv("UserProfile")
+   local os_type = vim.loop.os_uname().sysname
+   local homeDir = os.getenv("HOME")
+   local dataDir = vim.fn.stdpath("data")
+   local masonPackageLoc = dataDir .. '/mason/packages'
+   local omnisharp_loc = ""
+   if os_type == "Windows_NT" then
+      print("Config is loading on windows.")
+      homeDir = os.getenv("UserProfile")
 
-    omnisharp_loc = "\\Documents\\dev_tools\\omnisharp-win-x64\\OmniSharp.exe"
-end
+      omnisharp_loc = "\\Documents\\dev_tools\\omnisharp-win-x64\\OmniSharp.exe"
+   end
 
-local on_attach = function(client, bufnr)
-    -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+   local on_attach = function(client, bufnr)
+      -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-    local bufopts = { silent=true, buffer=bufnr, prefix="<leader>" }
+      local bufopts = { silent=true, buffer=bufnr, prefix="<leader>" }
 
-    local wk = require("which-key")
-    wk.register({
-        l = {
+      local wk = require("which-key")
+      wk.register({
+         l = {
             name = "LSP: " .. client.name,
             D = { function() vim.lsp.buf.declaration() end, "Find Declaration" },
             d = { function() vim.lsp.buf.definition() end, "Find Definition" },
@@ -37,24 +38,23 @@ local on_attach = function(client, bufnr)
             I = { function() vim.lsp.buf.incoming_calls() end, "Incoming Calls" },
             O = { function() vim.lsp.buf.outgooing_calls() end, "Outgoing Calls" },
             l = {
-                name = "Lenses",
-                c = { function() vim.lsp.codelens.clear() end, "Clear Lens" },
-                r = { function() vim.lsp.codelens.run() end, "Run Selected Lens" },
-                R = { function() vim.lsp.codelens.refresh() end, "Refresh Lens" },
-                d = { function() vim.lsp.codelens.display() end, "Display Lens" }
+               name = "Lenses",
+               c = { function() vim.lsp.codelens.clear() end, "Clear Lens" },
+               r = { function() vim.lsp.codelens.run() end, "Run Selected Lens" },
+               R = { function() vim.lsp.codelens.refresh() end, "Refresh Lens" },
+               d = { function() vim.lsp.codelens.display() end, "Display Lens" }
             }
-        }
-    }, bufopts)
-end
+         }
+      }, bufopts)
+   end
 
-local lsp_flags = {
-    debounce_text_changes = 150,
-}
+   local lsp_flags = {
+      debounce_text_changes = 150,
+   }
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+   local capabilities = vim.lsp.protocol.make_client_capabilities()
+   capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local lspServerConfigs = function()
    require 'lspconfig'.pyright.setup{
       before_init = function(_, config)
          --local stub_path = _G.join_paths(
@@ -236,7 +236,7 @@ end
 return {
    {
       "neovim/nvim-lspconfig",
-      init = lspServerConfigs,
+      init = lsp_setup,
    },
 
    {
@@ -253,5 +253,10 @@ return {
    { "saadparwaiz1/cmp_luasnip" },
    { "L3MON4D3/LuaSnip" },
    { "mfussenegger/nvim-dap" },
-   { "williamboman/mason.nvim" },
+   {
+      "williamboman/mason.nvim",
+      init = function()
+         require("mason").setup()
+      end,
+   },
 }
