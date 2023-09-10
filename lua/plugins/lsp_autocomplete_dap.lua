@@ -1,4 +1,4 @@
--- LSP/AutoCompletion & DAP
+-- LSP/AutoCompletion & DAP -------------------------------
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics, {
         update_in_insert = true,
@@ -185,17 +185,73 @@ local lspServerConfigs = function()
    }
 end
 
+-- CMP/Luasnip Conifiguration -----------------------------
+
+local cmp_setup = function()
+   local cmp = require("cmp")
+   local luasnip = require("luasnip")
+   return {
+      snippet = {
+         expand = function(args)
+            luasnip.lsp_expand(args.body)
+         end,
+      },
+      mapping = cmp.mapping.preset.insert({
+         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+         ['<C-f>'] = cmp.mapping.scroll_docs(4),
+         ['<C-Space>'] = cmp.mapping.complete(),
+         ['<CR>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+         },
+         ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+               cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+               luasnip.expand_or_jump()
+            else
+               fallback()
+            end
+         end, { 'i', 's' }),
+         ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+               cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+               luasnip.jump(-1)
+            else
+               fallback()
+            end
+         end, { 'i', 's' }),
+      }),
+      sources = {
+         { name = 'nvim_lsp' },
+         { name = 'luasnip' },
+         { name = 'neorg' },
+         { name = 'path' },
+      },
+   }
+
+end
+
 return {
-   { 
+   {
       "neovim/nvim-lspconfig",
+      init = lspServerConfigs,
+   },
+
+   {
+      "hrsh7th/nvim-cmp",
       dependencies = {
-         { "hrsh7th/nvim-cmp" },
          { "hrsh7th/cmp-nvim-lsp" },
          { "saadparwaiz1/cmp_luasnip" },
          { "L3MON4D3/LuaSnip" },
       },
-      config = lspServerConfigs,
+      init = cmp_setup,
    },
+
+   { "hrsh7th/cmp-nvim-lsp" },
+   { "saadparwaiz1/cmp_luasnip" },
+   { "L3MON4D3/LuaSnip" },
    { "mfussenegger/nvim-dap" },
    { "williamboman/mason.nvim" },
 }
