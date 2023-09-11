@@ -24,8 +24,8 @@ local telescope_table = {
 
 local telescope_function = function()
    require("telescope").setup(telescope_table)
-   require('telescope').load_extension('fzf')
-   require('telescope').load_extension('projects')
+   require("telescope").load_extension("fzf")
+   require("telescope").load_extension("projects")
 end
 
 return {
@@ -33,6 +33,7 @@ return {
       "nvim-telescope/telescope.nvim", version = "0.1.2",
       dependencies = {
          { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+         { "nvim-telescope/telescope-symbols.nvim" },
          {
             "ahmedkhalf/project.nvim",
             config = function()

@@ -235,6 +235,19 @@ end
 return {
    {
       "neovim/nvim-lspconfig",
+      dependencies = {
+         {
+            "SmiteshP/nvim-navbuddy",
+            dependencies = {
+               "SmiteshP/nvim-navic",
+               "MunifTanjim/nui.nvim",
+            },
+            opts = { lsp = { autoattach = true } },
+            init = function()
+               require("nvim-navbuddy").setup()
+            end,
+         }
+      },
       init = lsp_setup,
    },
 

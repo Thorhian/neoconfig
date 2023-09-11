@@ -1,14 +1,24 @@
+--------- UI & Theming Setup ------------------------------
+
+--------- Lua Line Setup ----------------------------------
 local lualine_table = {
    options = {
       globalstatus = true,
+      section_separators = { right = "", left = "" },
+      component_separators = { right = "/", left = "/" },
    },
    sections = {
       lualine_a = {
          {
             'mode',
             icons_enabled = true,
+            options = {
+               component_separators = { left = "", right = "" }
+            },
+            padding = 0,
+            color = { fg = "#ffff00", bg = "#ffff00" },
             fmt = function (_, _)
-               return "󰂫"
+               return "▊"
             end,
          }
       },
@@ -26,12 +36,21 @@ local lualine_table = {
       lualine_y = {},
       lualine_z = {}
    },
-   tabline = {},
+   tabline = {
+      -- lualine_a = {"diagnostics"},
+      -- lualine_b = {},
+      -- lualine_c = {},
+      -- lualine_x = {},
+      -- lualine_y = {},
+      -- lualine_z = {"tabs"}
+   },
    winbar = {
       --lualine_z = {'filename'},
    },
 }
+-----------------------------------------------------------
 
+--------- Ice? Noice! -------------------------------------
 local noice_config = function()
    require("noice").setup({
       lsp = {
@@ -52,7 +71,57 @@ local noice_config = function()
       },
    })
 end
+-----------------------------------------------------------
 
+--------- Tabline Via Tabby -------------------------------
+local tabby_config = function()
+   vim.o.showtabline = 2
+   local theme = {
+      fill = "TabLineFill",
+      head = "TabLine",
+      tab = "TabLine",
+      win = "TabLine",
+      tail = "TabLine",
+   }
+
+   require("tabby.tabline").set(function(line)
+      return {
+         {
+            { " 󰂫 ", hl = theme.head },
+            line.sep("", theme.head, theme.fill),
+         },
+         line.tabs().foreach(function(tab)
+            local hl = tab.is_current() and theme.current_tab or theme.tab
+            return {
+               line.sep("", hl, theme.fill),
+               tab.is_current() and '' or '',
+               tab.name(),
+               line.sep("", hl, theme.fill),
+               hl = hl,
+               margin = "  ",
+            }
+         end),
+         line.spacer(),
+         -- line.wins_in_tab(line.api.get_current_tab()).foreach(function(win)
+         --    return {
+         --       line.sep('', theme.win, theme.fill),
+         --       win.buf_name(),
+         --       line.sep("", theme.win, theme.fill),
+         --       hl = theme.win,
+         --       margin = " ",
+         --    }
+         -- end),
+         {
+            line.sep('', theme.tail, theme.fill),
+            { '  ', hl = theme.tail },
+         },
+         hl = theme.fill,
+      }
+   end)
+end
+-----------------------------------------------------------
+
+--------- Lazy Plugin Definitions -------------------------
 return {
    -- Theming & UI Looks
    {
@@ -60,7 +129,7 @@ return {
       lazy = false,
       priority = 1000,
       config = function()
-         vim.cmd("colorscheme carbonfox")
+         --vim.cmd("colorscheme carbonfox")
       end,
    },
 
@@ -68,6 +137,9 @@ return {
       "folke/tokyonight.nvim",
       lazy = false,
       priority = 1000,
+      init = function()
+         vim.cmd("colorscheme tokyonight-storm")
+      end,
    },
 
    {
@@ -110,5 +182,12 @@ return {
       init = noice_config,
    },
 
+   {
+      "nanozuki/tabby.nvim",
+      lazy = false,
+      init = tabby_config,
+   },
+
    { "kyazdani42/nvim-web-devicons" },
 }
+-----------------------------------------------------------
