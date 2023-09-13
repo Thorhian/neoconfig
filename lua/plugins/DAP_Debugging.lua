@@ -5,14 +5,14 @@ local dap_config = function()
    local actions = require("telescope.actions")
    local action_state = require("telescope.actions.state")
 
-   local homeDir = os.getenv( "HOME" )
+   local homeDir = os.getenv("HOME")
    local dataDir = vim.fn.stdpath("data")
-   local masonPackageLoc = dataDir .. '/mason/packages'
-   local cppExec = '/cpptools/extension/debugAdapters/bin/OpenDebugAD7'
-   local elsExec = '/elixir-ls/debugger.sh'
+   local masonPackageLoc = dataDir .. "/mason/packages"
+   local cppExec = "/cpptools/extension/debugAdapters/bin/OpenDebugAD7"
+   local elsExec = "/elixir-ls/debugger.sh"
 
    local os_type = vim.loop.os_uname().sysname
-   local netcoredbg_loc= ""
+   local netcoredbg_loc = ""
    if os_type == "Windows_NT" then
       print("Config is loading on windows.")
       homeDir = os.getenv("UserProfile")
@@ -23,16 +23,37 @@ local dap_config = function()
    function File_exists(name)
       local file = io.open(name, "r")
       if file ~= nil then
-         io.close(file) return true
+         io.close(file)
+         return true
       else
-         return false end
+         return false
+      end
    end
 
+   local dap = require("dap")
+   local dapVScode = require("dap.ext.vscode")
+   local dapUI = require("dapui")
+   local wk = require("which-key")
 
-   local dap = require('dap')
+   wk.register({
+         d = {
+            name = "Debugging",
+            b = { "<cmd>DapToggleBreakpoint<cr>", "Toggle Breakpoint" },
+            i = { "<cmd>DapStepInto<cr>", "Step Into" },
+            o = { "<cmd>DapStepOut<cr>", "Step Out" },
+            s = { "<cmd>DapStepOver<cr>", "Step Over" },
+            c = { "<cmd>DapContinue<cr>", "Continue" },
+            t = { function() dapUI.toggle() end, "Toggle Dap UI" },
+            r = { function()
+               dapVScode.load_launchjs(nil, { rt_lldb = { "rust" } })
+            end, "Load .vscode/launch.json" }
+         },
+      },
+      { prefix = "<leader>" })
+
    dap.adapters.cppdbg = {
-      id = 'cppdbg',
-      type = 'executable',
+      id = "cppdbg",
+      type = "executable",
       command = masonPackageLoc .. cppExec,
    }
 
@@ -59,21 +80,21 @@ local dap_config = function()
                      end,
                   }
                )
-                  :find()
+                   :find()
             end)
          end,
-         cwd = '${workspaceFolder}',
+         cwd = "${workspaceFolder}",
       },
       {
-         name = 'Attach to gdbserver :1234',
-         type = 'cppdbg',
-         request = 'launch',
-         MIMode = 'gdb',
-         miDebuggerServerAddress = 'localhost:1234',
-         miDebuggerPath = '/usr/bin/gdb',
-         cwd = '${workspaceFolder}',
+         name = "Attach to gdbserver :1234",
+         type = "cppdbg",
+         request = "launch",
+         MIMode = "gdb",
+         miDebuggerServerAddress = "localhost:1234",
+         miDebuggerPath = "/usr/bin/gdb",
+         cwd = "${workspaceFolder}",
          program = function()
-            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
          end,
       },
    }
@@ -82,7 +103,7 @@ local dap_config = function()
    dap.configurations.rust = dap.configurations.cpp
 
    dap.adapters.mix_task = {
-      type = 'executable',
+      type = "executable",
       command = masonPackageLoc .. elsExec,
       args = {}
    }
@@ -91,8 +112,8 @@ local dap_config = function()
       {
          type = "mix_task",
          name = "mix test",
-         task = 'test',
-         taskArgs = {"--trace"},
+         task = "test",
+         taskArgs = { "--trace" },
          request = "launch",
          startApps = true,
          projectDir = "${workspaceFolder}",
@@ -116,7 +137,7 @@ local dap_config = function()
 
    dap.adapters.godot = {
       type = "server",
-      host = '127.0.0.1',
+      host = "127.0.0.1",
       port = 6006,
    }
 
@@ -130,10 +151,47 @@ local dap_config = function()
       }
    }
 
+   dap.adapters.firefox = {
+      type = "executable",
+      command = "node",
+      args = { masonPackageLoc .. "/firefox-debug-adaptor/dist/adaptor.bundle.js" },
+   }
+
+   dap.adapters.chrome = {
+      type = "executable",
+      command = "node",
+      args = { masonPackageLoc .. "/chrome-debug-adapter/out/src/chromeDebug.js" }
+   }
+
+   dap.configurations.javascript = {
+      {
+         name = "Debug with Firefox",
+         type = "firefox",
+         request = "launch",
+         reAttach = true,
+         url = "http://localhost:3000",
+         webRoot = "${workspaceFolder}",
+         firefoxExecutable = "/usr/bin/firefox"
+      }
+   }
+
+   dap.configurations.javascript = {
+      {
+         type = "chrome",
+         request = "attach",
+         program = "${file}",
+         cwd = vim.fn.getcwd(),
+         sourceMaps = true,
+         protocol = "inspector",
+         port = 9222,
+         webRoot = "${workspaceFolder}"
+      }
+   }
+
    netcoredbg_loc = homeDir .. netcoredbg_loc
    if File_exists(netcoredbg_loc) then
       dap.adapters.coreclr = {
-         type = 'executable',
+         type = "executable",
          command = netcoredbg_loc
       }
 
@@ -143,7 +201,7 @@ local dap_config = function()
             name = "launch - netcoredbg",
             request = "launch",
             program = function()
-               return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+               return vim.fn.input("Path to dll", vim.fn.getcwd() .. "/bin/Debug/", "file")
             end,
          },
       }
@@ -186,7 +244,7 @@ local dapUI_config = function()
                -- Elements can be strings or table with id and size keys.
                { id = "scopes", size = 0.25 },
                "breakpoints",
-               "stacks",
+               -- "stacks",
                "watches",
             },
             size = 40, -- 40 columns
@@ -218,13 +276,14 @@ local dapUI_config = function()
          },
       },
       floating = {
-         max_height = nil, -- These can be integers or a float between 0 and 1.
-         max_width = nil, -- Floats will be treated as percentage of your screen.
-         border = "single", -- Border style. Can be "single", "double" or "rounded"
+         max_height = nil,  -- These can be integers or a float between 0 and 1.
+         max_width = nil,   -- Floats will be treated as percentage of your screen.
+         border = "rounded", -- Border style. Can be "single", "double" or "rounded"
          mappings = {
             close = { "q", "<Esc>" },
          },
       },
+      force_buffers = true,
       windows = { indent = 1 },
       render = {
          max_type_length = nil, -- Can be integer or nil.
@@ -234,7 +293,7 @@ local dapUI_config = function()
 end
 
 local dap_virtual_text_setup = function()
-   require('nvim-dap-virtual-text').setup({
+   require("nvim-dap-virtual-text").setup({
       show_stop_reason = true,
    })
 end
@@ -242,19 +301,21 @@ end
 return {
    {
       "mfussenegger/nvim-dap",
+      dependencies = {
+         {
+            "rcarriga/nvim-dap-ui",
+            dependencies = {
+               "mfussenegger/nvim-dap"
+            },
+            init = dapUI_config,
+         },
+
+         {
+            "theHamsta/nvim-dap-virtual-text",
+            init = dap_virtual_text_setup,
+         },
+      },
       init = dap_config,
    },
 
-   {
-      "rcarriga/nvim-dap-ui",
-      dependencies = {
-         "mfussenegger/nvim-dap"
-      },
-      init = dapUI_config,
-   },
-
-   {
-      "theHamsta/nvim-dap-virtual-text",
-      init = dap_virtual_text_setup,
-   },
 }

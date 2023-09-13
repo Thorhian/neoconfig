@@ -23,12 +23,20 @@ local lsp_setup = function()
 
       local bufopts = { silent=true, buffer=bufnr, prefix="<leader>" }
 
+      local navbuddy = require("nvim-navbuddy")
+      local navic = require("nvim-navic")
+      navbuddy.attach(client, bufnr)
+
+      if client.server_capabilities.documentSymbolProvider then
+         navic.attach(client, bufnr)
+      end
+
       local wk = require("which-key")
       wk.register({
          l = {
             name = "LSP: " .. client.name,
-            D = { function() vim.lsp.buf.declaration() end, "Find Declaration" },
-            d = { function() vim.lsp.buf.definition() end, "Find Definition" },
+            D = { function() vim.lsp.buf.declaration({ reuse_win = true }) end, "Find Declaration" },
+            d = { function() vim.lsp.buf.definition({ reuse_win = true }) end, "Find Definition" },
             k = { function() vim.lsp.buf.hover() end, "Show Hover Info" },
             i = { function() vim.lsp.buf.implementation() end, "Find Implementation" },
             c = { function() vim.lsp.buf.code_action() end, "Code Action(s)" },
@@ -44,7 +52,11 @@ local lsp_setup = function()
                R = { function() vim.lsp.codelens.refresh() end, "Refresh Lens" },
                d = { function() vim.lsp.codelens.display() end, "Display Lens" }
             }
-         }
+         },
+         n = {
+            name = "Navigation",
+            n = { function() navbuddy.open() end, "Navbuddy" },
+         },
       }, bufopts)
    end
 
@@ -155,6 +167,19 @@ local lsp_setup = function()
       capabilities = capabilities,
    }
 
+   require("lspconfig").rust_analyzer.setup({
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      settings = {
+         ["rust-analyzer"] = {
+            diagnostics = {
+               enable = false,
+            }
+         }
+      }
+   })
+
    require'lspconfig'.gdscript.setup {
       on_attach = on_attach,
       flags = lsp_flags,
@@ -242,7 +267,6 @@ return {
                "SmiteshP/nvim-navic",
                "MunifTanjim/nui.nvim",
             },
-            opts = { lsp = { autoattach = true } },
             init = function()
                require("nvim-navbuddy").setup()
             end,

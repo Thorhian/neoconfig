@@ -1,53 +1,55 @@
 --------- UI & Theming Setup ------------------------------
 
 --------- Lua Line Setup ----------------------------------
-local lualine_table = {
-   options = {
-      globalstatus = true,
-      section_separators = { right = "", left = "" },
-      component_separators = { right = "/", left = "/" },
-   },
-   sections = {
-      lualine_a = {
-         {
-            'mode',
-            icons_enabled = true,
-            options = {
-               component_separators = { left = "", right = "" }
-            },
-            padding = 0,
-            color = { fg = "#ffff00", bg = "#ffff00" },
-            fmt = function (_, _)
-               return "▊"
-            end,
-         }
+local lualine_setup = function()
+   require("lualine").setup({
+      options = {
+         globalstatus = true,
+         section_separators = { right = "", left = "" },
+         component_separators = { right = "/", left = "/" },
       },
-      lualine_b = {'branch', 'diff', 'diagnostics'},
-      lualine_c = {'filename'},
-      lualine_x = {'encoding', 'fileformat', 'filetype'},
-      lualine_y = {'progress'},
-      lualine_z = {'location'}
-   },
-   inactive_sections = {
-      lualine_a = {},
-      lualine_b = {},
-      lualine_c = {'filename'},
-      lualine_x = {'location'},
-      lualine_y = {},
-      lualine_z = {}
-   },
-   tabline = {
-      -- lualine_a = {"diagnostics"},
-      -- lualine_b = {},
-      -- lualine_c = {},
-      -- lualine_x = {},
-      -- lualine_y = {},
-      -- lualine_z = {"tabs"}
-   },
-   winbar = {
-      --lualine_z = {'filename'},
-   },
-}
+      sections = {
+         lualine_a = {
+            {
+               'mode',
+               icons_enabled = true,
+               options = {
+                  component_separators = { left = "", right = "" }
+               },
+               padding = 0,
+               color = { fg = "#ffff00", bg = "#ffff00" },
+               fmt = function(_, _)
+                  return "▊"
+               end,
+            }
+         },
+         lualine_b = { 'branch', 'diff', 'diagnostics' },
+         lualine_c = { 'filename', require("noice").api.status.mode.get },
+         lualine_x = { 'encoding', 'fileformat', 'filetype' },
+         lualine_y = { 'progress' },
+         lualine_z = { 'location' }
+      },
+      inactive_sections = {
+         lualine_a = {},
+         lualine_b = {},
+         lualine_c = { 'filename' },
+         lualine_x = { 'location' },
+         lualine_y = {},
+         lualine_z = {}
+      },
+      tabline = {
+         -- lualine_a = {"diagnostics"},
+         -- lualine_b = {},
+         -- lualine_c = {},
+         -- lualine_x = {},
+         -- lualine_y = {},
+         -- lualine_z = {"tabs"}
+      },
+      winbar = {
+         --lualine_z = {'filename'},
+      },
+   })
+end
 -----------------------------------------------------------
 
 --------- Ice? Noice! -------------------------------------
@@ -63,11 +65,11 @@ local noice_config = function()
       },
       -- you can enable a preset for easier configuration
       presets = {
-         bottom_search = true, -- use a classic bottom cmdline for search
-         command_palette = true, -- position the cmdline and popupmenu together
+         bottom_search = true,         -- use a classic bottom cmdline for search
+         command_palette = true,       -- position the cmdline and popupmenu together
          long_message_to_split = true, -- long messages will be sent to a split
-         inc_rename = false, -- enables an input dialog for inc-rename.nvim
-         lsp_doc_border = false, -- add a border to hover docs and signature help
+         inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+         lsp_doc_border = false,       -- add a border to hover docs and signature help
       },
    })
 end
@@ -144,9 +146,10 @@ return {
 
    {
       "nvim-lualine/lualine.nvim",
-      config = function()
-         require("lualine").setup(lualine_table)
-      end
+      depedencies = {
+         "folke/noice.nvim"
+      },
+      config = lualine_setup
    },
 
    {
@@ -165,7 +168,7 @@ return {
 
    {
       "goolord/alpha-nvim",
-      config = function ()
+      config = function()
          require("alpha").setup(require("alpha.themes.dashboard").config)
       end
    },
@@ -180,6 +183,8 @@ return {
          "rcarriga/nvim-notify",
       },
       init = noice_config,
+      lazy = false,
+      priority = 2000,
    },
 
    {
