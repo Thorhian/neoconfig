@@ -16,6 +16,7 @@ local default_mappings = function()
          J = { "<cmd>wincmd J<cr>", "Move Window Down" },
          K = { "<cmd>wincmd K<cr>", "Move Window Up" },
          L = { "<cmd>wincmd L<cr>", "Move Window Left" },
+         T = { "<cmd>wincmd T<cr>", "Window -> Tab" }
       },
       f = {
          name = "Files",
@@ -63,7 +64,11 @@ local default_mappings = function()
          name = "Tabs",
          n = { "<cmd>tabnew<cr><cmd>Telescope projects<cr>", "Open Project in New Tab" },
          N = { "<cmd>tabnew<cr>", "Open New Tab" },
-      }
+      },
+      L = {
+         name = "Lazy Pacman",
+         L = { "<cmd>Lazy<cr>", "Open Lazy" },
+      },
    }, { prefix = "<leader>" })
 end
 

@@ -2,6 +2,7 @@
 
 --------- Lua Line Setup ----------------------------------
 local lualine_setup = function()
+   local navic = require("nvim-navic")
    require("lualine").setup({
       options = {
          globalstatus = true,
@@ -24,7 +25,7 @@ local lualine_setup = function()
             }
          },
          lualine_b = { 'branch', 'diff', 'diagnostics' },
-         lualine_c = { 'filename', require("noice").api.status.mode.get },
+         lualine_c = { require("noice").api.status.mode.get },
          lualine_x = { 'encoding', 'fileformat', 'filetype' },
          lualine_y = { 'progress' },
          lualine_z = { 'location' }
@@ -46,7 +47,8 @@ local lualine_setup = function()
          -- lualine_z = {"tabs"}
       },
       winbar = {
-         --lualine_z = {'filename'},
+         lualine_b = {"filename"},
+         lualine_c = {"navic"}
       },
    })
 end

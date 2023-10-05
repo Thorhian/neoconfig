@@ -31,20 +31,22 @@ local lsp_setup = function()
          navic.attach(client, bufnr)
       end
 
+      local goto_preview = require("goto-preview")
       local wk = require("which-key")
       wk.register({
          l = {
             name = "LSP: " .. client.name,
-            D = { function() vim.lsp.buf.declaration({ reuse_win = true }) end, "Find Declaration" },
-            d = { function() vim.lsp.buf.definition({ reuse_win = true }) end, "Find Definition" },
+            D = { function() goto_preview.goto_preview_type_definition() end, "Find Declaration" },
+            d = { function() goto_preview.goto_preview_definition() end, "Find Definition" },
             k = { function() vim.lsp.buf.hover() end, "Show Hover Info" },
-            i = { function() vim.lsp.buf.implementation() end, "Find Implementation" },
+            i = { function() goto_preview.goto_preview_implementation() end, "Find Implementation" },
             c = { function() vim.lsp.buf.code_action() end, "Code Action(s)" },
-            r = { function() vim.lsp.buf.references() end, "Find References" },
+            r = { function() goto_preview.goto_preview_references() end, "Find References" },
             R = { function() vim.lsp.buf.rename() end, "Rename Symbol" },
             f = { function() vim.lsp.buf.format() end, "Format Buffer" },
             I = { function() vim.lsp.buf.incoming_calls() end, "Incoming Calls" },
             O = { function() vim.lsp.buf.outgooing_calls() end, "Outgoing Calls" },
+            P = { function() goto_preview.close_all_win() end, "Close Preview Windows" },
             l = {
                name = "Lenses",
                c = { function() vim.lsp.codelens.clear() end, "Clear Lens" },
@@ -67,7 +69,9 @@ local lsp_setup = function()
    local capabilities = vim.lsp.protocol.make_client_capabilities()
    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-   require 'lspconfig'.pyright.setup{
+   local lspconfig = require("lspconfig")
+
+   lspconfig.pyright.setup{
       before_init = function(_, config)
          --local stub_path = _G.join_paths(
          --    _G.get_runtime_dir(),
@@ -85,7 +89,7 @@ local lsp_setup = function()
       flags = lsp_flags,
    }
 
-   require'lspconfig'.lua_ls.setup {
+   lspconfig.lua_ls.setup {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
@@ -114,14 +118,14 @@ local lsp_setup = function()
    -- Configure Elixir LS
    local els_unexpanded_dir = "/elixir-ls/language_server.sh"
    local elixirLS_dir = masonPackageLoc .. els_unexpanded_dir
-   require'lspconfig'.elixirls.setup{
+   lspconfig.elixirls.setup{
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
       cmd = { elixirLS_dir },
    }
 
-   require'lspconfig'.tailwindcss.setup {
+   lspconfig.tailwindcss.setup {
       init_options = {
          userlanguages = {
             eelixir = "html-eex",
@@ -167,7 +171,7 @@ local lsp_setup = function()
       capabilities = capabilities,
    }
 
-   require("lspconfig").rust_analyzer.setup({
+   lspconfig.rust_analyzer.setup({
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
@@ -180,20 +184,26 @@ local lsp_setup = function()
       }
    })
 
-   require'lspconfig'.gdscript.setup {
+   lspconfig.gdscript.setup {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
    }
 
-   require'lspconfig'.clangd.setup {
+   lspconfig.clangd.setup {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
    }
+
+   lspconfig.zls.setup({
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+   })
 
    omnisharp_loc = homeDir .. omnisharp_loc
-   require'lspconfig'.omnisharp.setup {
+   lspconfig.omnisharp.setup {
       cmd = { omnisharp_loc },
       on_attach = on_attach,
       capabilities = capabilities,
@@ -203,7 +213,7 @@ local lsp_setup = function()
       enable_roslyn_analyzers = false,
    }
 
-   require'lspconfig'.arduino_language_server.setup {
+   lspconfig.arduino_language_server.setup {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
@@ -270,6 +280,13 @@ return {
             init = function()
                require("nvim-navbuddy").setup()
             end,
+         },
+
+         {
+            "rmagatti/goto-preview",
+            init = function()
+               require("goto-preview").setup()
+            end
          }
       },
       init = lsp_setup,
@@ -285,6 +302,7 @@ return {
       init = cmp_setup,
    },
 
+   { "microsoft/python-type-stubs", lazy = true},
    { "hrsh7th/cmp-nvim-lsp" },
    { "saadparwaiz1/cmp_luasnip" },
    { "L3MON4D3/LuaSnip" },
