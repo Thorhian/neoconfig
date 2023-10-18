@@ -77,6 +77,8 @@ return {
       "folke/which-key.nvim",
       lazy = false,
       priority = 1000,
-      init = default_mappings
+      init = default_mappings,
    },
+
+   "anuvyklack/hydra.nvim",
 }

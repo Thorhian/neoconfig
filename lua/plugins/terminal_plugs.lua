@@ -6,7 +6,7 @@ return {
          require("toggleterm").setup({
             hide_numbers = true,
             auto_scroll = true,
-            open_mapping = [[<leader>tt]],
+            open_mapping = [[<c-\>]],
          })
       end
    },

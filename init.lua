@@ -17,8 +17,15 @@ vim.cmd [[
     set ttyfast
     set nowrap
     tnoremap \\\ <C-\><C-n>
-    
+
     let g:db_ui_use_nerd_fonts = 1
+
+    if exists("g:neovide")
+       let g:neovide_floating_blur_amount_x = 2.0
+       let g:neovide_floating_blur_amount_y = 2.0
+       let g:neovide_cursor_vfx_mode = "railgun"
+       set guifont=FiraCode\ Nerd\ Font:h14
+    endif
 ]]
 
 -- Bootstrap Lazy.Nvim

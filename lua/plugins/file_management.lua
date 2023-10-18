@@ -21,5 +21,17 @@ return {
    {
       "kelly-lin/ranger.nvim",
       init = ranger_setup
+   },
+
+   {
+      "stevearc/oil.nvim",
+      opts = {},
+      init = function()
+         require("oil").setup({
+            view_options = {
+               show_hidden = true,
+            }
+         })
+      end,
    }
 }

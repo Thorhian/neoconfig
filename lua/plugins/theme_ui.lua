@@ -2,7 +2,6 @@
 
 --------- Lua Line Setup ----------------------------------
 local lualine_setup = function()
-   local navic = require("nvim-navic")
    require("lualine").setup({
       options = {
          globalstatus = true,
@@ -47,8 +46,7 @@ local lualine_setup = function()
          -- lualine_z = {"tabs"}
       },
       winbar = {
-         lualine_b = {"filename"},
-         lualine_c = {"navic"}
+         -- lualine_b = {"filename"},
       },
    })
 end
@@ -133,7 +131,7 @@ return {
       lazy = false,
       priority = 1000,
       config = function()
-         --vim.cmd("colorscheme carbonfox")
+         vim.cmd("colorscheme carbonfox")
       end,
    },
 
@@ -141,9 +139,9 @@ return {
       "folke/tokyonight.nvim",
       lazy = false,
       priority = 1000,
-      init = function()
-         vim.cmd("colorscheme tokyonight-storm")
-      end,
+      --init = function()
+      --   vim.cmd("colorscheme tokyonight-storm")
+      --end,
    },
 
    {

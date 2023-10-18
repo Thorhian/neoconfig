@@ -34,6 +34,23 @@ local dap_config = function()
    local dapVScode = require("dap.ext.vscode")
    local dapUI = require("dapui")
    local wk = require("which-key")
+   --local hydra = require("hydra")
+
+   --local stepping_hint = [[
+   --   _s_: Step Over    _i_: Step Into    _o_: Step Out
+   --]]
+
+   --hydra({
+   --   name = "Debug Controls",
+   --   mode = "n",
+   --   body = "<leader>d",
+   --   hint = stepping_hint,
+   --   heads = {
+   --      { "s", "<cmd>DapStepOver<cr>" },
+   --      { "i", "<cmd>DapStepInto<cr>" },
+   --      { "o", "<cmd>DapStepOut<cr>" },
+   --   }
+   --})
 
    wk.register({
          d = {
@@ -45,7 +62,7 @@ local dap_config = function()
             c = { "<cmd>DapContinue<cr>", "Continue" },
             t = { function() dapUI.toggle() end, "Toggle Dap UI" },
             r = { function()
-               dapVScode.load_launchjs(nil, { rt_lldb = { "rust" } })
+               dapVScode.load_launchjs(nil, { cppdbg = { "rust", "c", "cpp", "h", "hpp" } })
             end, "Load .vscode/launch.json" }
          },
       },

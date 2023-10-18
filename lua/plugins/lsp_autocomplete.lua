@@ -23,13 +23,14 @@ local lsp_setup = function()
 
       local bufopts = { silent=true, buffer=bufnr, prefix="<leader>" }
 
-      local navbuddy = require("nvim-navbuddy")
-      local navic = require("nvim-navic")
-      navbuddy.attach(client, bufnr)
+      -- local navbuddy = require("nvim-navbuddy")
+      -- local navic = require("nvim-navic")
+      -- navbuddy.attach(client, bufnr)
 
-      if client.server_capabilities.documentSymbolProvider then
-         navic.attach(client, bufnr)
-      end
+      -- if client.server_capabilities.documentSymbolProvider then
+      --    navic.attach(client, bufnr)
+      -- end
+      local lspsaga = require("lspsaga")
 
       local goto_preview = require("goto-preview")
       local wk = require("which-key")
@@ -57,7 +58,8 @@ local lsp_setup = function()
          },
          n = {
             name = "Navigation",
-            n = { function() navbuddy.open() end, "Navbuddy" },
+            -- n = { function() navbuddy.open() end, "Navbuddy" },
+            n = { "" , "Navbuddy" },
          },
       }, bufopts)
    end
@@ -272,21 +274,19 @@ return {
       "neovim/nvim-lspconfig",
       dependencies = {
          {
-            "SmiteshP/nvim-navbuddy",
-            dependencies = {
-               "SmiteshP/nvim-navic",
-               "MunifTanjim/nui.nvim",
-            },
-            init = function()
-               require("nvim-navbuddy").setup()
-            end,
-         },
-
-         {
             "rmagatti/goto-preview",
             init = function()
                require("goto-preview").setup()
             end
+         },
+         {
+            "nvimdev/lspsaga.nvim",
+            init = function()
+               require("lspsaga").setup({})
+            end,
+            dependencies = {
+               "nvim-treesitter/nvim-treesitter"
+            },
          }
       },
       init = lsp_setup,
