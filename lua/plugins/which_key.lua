@@ -24,7 +24,7 @@ local default_mappings = function()
          t = { "<cmd>Neotree toggle<cr>", "Toggle NeoTree" },
          T = { "<cmd>Telescope file_browser<cr>", "Telescope File Browser" },
          r = { "<cmd>Telescope oldfiles<cr>", "Recent Files" },
-         s = { "<cmd>w<cr>", "Save Current File" },
+         s = { "<cmd>silent w<cr>", "Save Current File" },
       },
       p = {
          name = "Projects",
