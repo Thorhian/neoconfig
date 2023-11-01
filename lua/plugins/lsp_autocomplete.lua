@@ -12,10 +12,7 @@ local lsp_setup = function()
    local masonPackageLoc = dataDir .. '/mason/packages'
    local omnisharp_loc = ""
    if os_type == "Windows_NT" then
-      print("Config is loading on windows.")
       homeDir = os.getenv("UserProfile")
-
-      omnisharp_loc = "\\Documents\\dev_tools\\omnisharp-win-x64\\OmniSharp.exe"
    end
 
    local on_attach = function(client, bufnr)
@@ -204,7 +201,7 @@ local lsp_setup = function()
       capabilities = capabilities,
    })
 
-   omnisharp_loc = homeDir .. omnisharp_loc
+   omnisharp_loc = masonPackageLoc .. "/omnisharp/omnisharp.cmd"
    lspconfig.omnisharp.setup {
       cmd = { omnisharp_loc },
       on_attach = on_attach,

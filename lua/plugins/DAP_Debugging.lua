@@ -14,7 +14,6 @@ local dap_config = function()
    local os_type = vim.loop.os_uname().sysname
    local netcoredbg_loc = ""
    if os_type == "Windows_NT" then
-      print("Config is loading on windows.")
       homeDir = os.getenv("UserProfile")
 
       netcoredbg_loc = "\\Documents\\dev_tools\\netcoredbg-win64\\netcoredbg\\netcoredbg.exe"
