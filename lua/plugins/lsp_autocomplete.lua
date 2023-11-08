@@ -39,6 +39,7 @@ local lsp_setup = function()
             k = { function() vim.lsp.buf.hover() end, "Show Hover Info" },
             i = { function() goto_preview.goto_preview_implementation() end, "Find Implementation" },
             c = { function() vim.lsp.buf.code_action() end, "Code Action(s)" },
+            C = { function() goto_preview.close_all_win() end, "Close Peek Windows" },
             r = { function() goto_preview.goto_preview_references() end, "Find References" },
             R = { function() vim.lsp.buf.rename() end, "Rename Symbol" },
             f = { function() vim.lsp.buf.format() end, "Format Buffer" },
@@ -190,7 +191,18 @@ local lsp_setup = function()
    }
 
    lspconfig.clangd.setup {
-      on_attach = on_attach,
+      on_attach = function(client, bufnr)
+         local bufopts = { silent=true, buffer=bufnr, prefix="<leader>" }
+         local wk = require("which-key")
+         wk.register({
+            c = {
+               name = "clangd",
+               k = { "<cmd>ClangdSwitchSourceHeader<cr>" , "Swap to Header/Source" },
+            },
+         }, bufopts)
+
+         on_attach(client, bufnr)
+      end,
       flags = lsp_flags,
       capabilities = capabilities,
    }
