@@ -13,6 +13,7 @@ vim.cmd [[
     set autoindent
     set relativenumber
     set number
+    set signcolumn=yes:1
     filetype plugin indent on
     set ttyfast
     set nowrap
