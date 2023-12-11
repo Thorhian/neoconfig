@@ -34,17 +34,15 @@ local lsp_setup = function()
       wk.register({
          l = {
             name = "LSP: " .. client.name,
-            D = { function() goto_preview.goto_preview_type_definition() end, "Find Declaration" },
-            d = { function() goto_preview.goto_preview_definition() end, "Find Definition" },
+            D = { function() goto_preview.goto_preview_definition() end, "Find Declaration" },
+            d = { function() vim.lsp.buf.definition() end, "Find Definition" },
             k = { function() vim.lsp.buf.hover() end, "Show Hover Info" },
-            i = { function() goto_preview.goto_preview_implementation() end, "Find Implementation" },
+            i = { function() vim.lsp.buf.implementation() end, "Find Implementation" },
+            I = { function() goto_preview.goto_preview_implementation() end, "Preview Implementation" },
             c = { function() vim.lsp.buf.code_action() end, "Code Action(s)" },
-            C = { function() goto_preview.close_all_win() end, "Close Peek Windows" },
             r = { function() goto_preview.goto_preview_references() end, "Find References" },
             R = { function() vim.lsp.buf.rename() end, "Rename Symbol" },
             f = { function() vim.lsp.buf.format() end, "Format Buffer" },
-            I = { function() vim.lsp.buf.incoming_calls() end, "Incoming Calls" },
-            O = { function() vim.lsp.buf.outgooing_calls() end, "Outgoing Calls" },
             P = { function() goto_preview.close_all_win() end, "Close Preview Windows" },
             l = {
                name = "Lenses",
@@ -52,7 +50,12 @@ local lsp_setup = function()
                r = { function() vim.lsp.codelens.run() end, "Run Selected Lens" },
                R = { function() vim.lsp.codelens.refresh() end, "Refresh Lens" },
                d = { function() vim.lsp.codelens.display() end, "Display Lens" }
-            }
+            },
+            C = {
+               name = "Calls",
+               i = { function() vim.lsp.buf.incoming_calls() end, "Incoming Calls" },
+               o = { function() vim.lsp.buf.outgooing_calls() end, "Outgoing Calls" },
+            },
          },
          n = {
             name = "Navigation",
