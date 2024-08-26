@@ -8,12 +8,10 @@ local ranger_setup = function()
    })
 
    local wk = require("which-key")
-   local wk_opts = { prefix = "<leader>" }
-   local wk_binds = {
-      r = { function() ranger.open(true) end , "Browse Ranger" }
-   }
-
-   wk.register(wk_binds, wk_opts)
+   wk.add({
+      mode = { "n" },
+      { "<leader>r", function() ranger.open(true) end, desc = "Browse Ranger" },
+   })
 end
 -----------------------------------------------------------
 

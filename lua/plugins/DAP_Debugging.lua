@@ -50,22 +50,19 @@ local dap_config = function()
    --      { "o", "<cmd>DapStepOut<cr>" },
    --   }
    --})
-
-   wk.register({
-         d = {
-            name = "Debugging",
-            b = { "<cmd>DapToggleBreakpoint<cr>", "Toggle Breakpoint" },
-            i = { "<cmd>DapStepInto<cr>", "Step Into" },
-            o = { "<cmd>DapStepOut<cr>", "Step Out" },
-            s = { "<cmd>DapStepOver<cr>", "Step Over" },
-            c = { "<cmd>DapContinue<cr>", "Continue" },
-            t = { function() dapUI.toggle() end, "Toggle Dap UI" },
-            r = { function()
-               dapVScode.load_launchjs(nil, { cppdbg = { "rust", "c", "cpp", "h", "hpp" } })
-            end, "Load .vscode/launch.json" }
-         },
-      },
-      { prefix = "<leader>" })
+   wk.add({
+      mode = { "n" },
+      { "<leader>d", group = "Debugging" },
+      { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "Toggle Breakpoint" },
+      { "<leader>di", "<cmd>DapStepInto<cr>", desc = "Step Into" },
+      { "<leader>do", "<cmd>DapStepOut<cr>", desc = "Step Out" },
+      { "<leader>ds", "<cmd>DapStepOver<cr>", desc = "Step Over" },
+      { "<leader>dc", "<cmd>DapContinue<cr>", desc = "Continue" },
+      { "<leader>dt", function() dapUI.toggle() end, desc = "Toggle Dap UI" },
+      { "<leader>dr", function()
+         dapVScode.load_launchjs(nil, { cppdbg = { "rust", "c", "cpp", "h", "hpp" } })
+      end, desc = "Load .vscode/launch.json" }
+   })
 
    dap.adapters.cppdbg = {
       id = "cppdbg",

@@ -1,75 +1,76 @@
 local default_mappings = function()
    local wk = require("which-key")
 
-   wk.register({
-      w = {
-         name = "Windows/Panes",
-         l = { "<cmd>wincmd l<cr>", "Move Right" },
-         h = { "<cmd>wincmd h<cr>", "Move Left" },
-         j = { "<cmd>wincmd j<cr>", "Move Down" },
-         k = { "<cmd>wincmd k<cr>", "Move Up" },
-         v = { "<cmd>wincmd v<cr>", "Vertical Split" },
-         s = { "<cmd>wincmd s<cr>", "Horiz. Split" },
-         q = { "<cmd>wincmd q<cr>", "Kill Window" },
-         ["="] = { "<cmd>wincmd =<cr>", "Equalize Windows" },
-         H = { "<cmd>wincmd H<cr>", "Move Window Right" },
-         J = { "<cmd>wincmd J<cr>", "Move Window Down" },
-         K = { "<cmd>wincmd K<cr>", "Move Window Up" },
-         L = { "<cmd>wincmd L<cr>", "Move Window Left" },
-         T = { "<cmd>wincmd T<cr>", "Window -> Tab" }
+   wk.add({
+      mode = { "n" },
+      {
+         { "<leader>w", group = "Windows/Panes" },
+         { "<leader>wl", "<cmd>wincmd l<cr>", desc = "Move Right" },
+         { "<leader>wh", "<cmd>wincmd h<cr>", desc = "Move Left" },
+         { "<leader>wj", "<cmd>wincmd j<cr>", desc = "Move Down" },
+         { "<leader>wk", "<cmd>wincmd k<cr>", desc = "Move Up" },
+         { "<leader>wv", "<cmd>wincmd v<cr>", desc = "Vertical Split" },
+         { "<leader>ws", "<cmd>wincmd s<cr>", desc = "Horiz. Split" },
+         { "<leader>wq", "<cmd>wincmd q<cr>", desc = "Kill Window" },
+         { "<leader>w=", "<cmd>wincmd =<cr>", desc = "Equalize Windows" },
+         { "<leader>wH", "<cmd>wincmd H<cr>", desc = "Move Window Right" },
+         { "<leader>wJ", "<cmd>wincmd J<cr>", desc = "Move Window Down" },
+         { "<leader>wK", "<cmd>wincmd K<cr>", desc = "Move Window Up" },
+         { "<leader>wL", "<cmd>wincmd L<cr>", desc = "Move Window Left" },
+         { "<leader>wT", "<cmd>wincmd T<cr>", desc = "Window -> Tab" },
       },
-      f = {
-         name = "Files",
-         f = { "<cmd>Telescope find_files<cr>", "Find Files" },
-         t = { "<cmd>Neotree toggle<cr>", "Toggle NeoTree" },
-         T = { "<cmd>Telescope file_browser<cr>", "Telescope File Browser" },
-         r = { "<cmd>Telescope oldfiles<cr>", "Recent Files" },
-         s = { "<cmd>silent w<cr>", "Save Current File" },
+      {
+         { "<leader>f", group = "Files" },
+         { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+         { "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "Toggle NeoTree" },
+         { "<leader>fT", "<cmd>Telescope file_browser<cr>", desc = "Telescope File Browser" },
+         { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
+         { "<leader>fs", "<cmd>silent w<cr>", desc = "Save Current File" },
       },
-      p = {
-         name = "Projects",
-         p = { "<cmd>Telescope projects<cr>", "Browse Projects" },
+      {
+         { "<leader>p", group = "Projects" },
+         { "<leader>pp", "<cmd>Telescope projects<cr>", desc = "Browse Projects" },
       },
-      e = {
-         name = "Diagnostics",
-         e = { function() vim.diagnostic.open_float() end, "Error Popup" },
-         h = { function() vim.diagnostic.goto_prev() end, "Goto Prev Error" },
-         l = { function() vim.diagnostic.goto_next() end, "Goto Next Error" },
-         q = { function() vim.diagnostic.setloclist() end, "Set LocList" },
+      {
+         { "<leader>e", group = "Diagnostics" },
+         { "<leader>ee", function() vim.diagnostic.open_float() end, desc = "Error Popup" },
+         { "<leader>eh", function() vim.diagnostic.goto_prev() end, desc = "Goto Prev Error" },
+         { "<leader>el", function() vim.diagnostic.goto_next() end, desc = "Goto Next Error" },
+         { "<leader>eq", function() vim.diagnostic.setloclist() end, desc = "Set LocList" },
       },
-      K = {
-         name = "Help & Documentation",
-         h = { "<cmd>Telescope help_tags<cr>", "Vim Help" },
+      {
+         { "<leader>K", group = "Help & Documentation" },
+         { "<leader>Kh", "<cmd>Telescope help_tags<cr>", desc = "Vim Help" },
       },
-      s = {
-         name = "Telescope",
-         s = { "<cmd>Telescope<cr>", "All Telescope Finders" },
+      {
+         { "<leader>s", group = "Telescope" },
+         { "<leader>s", "<cmd>Telescope<cr>", desc = "All Telescope Finders" },
       },
-      b = {
-         name = "Buffers",
-         b = { "<cmd>Telescope buffers<cr>", "List Buffers" },
-         n = { "<cmd>bn<cr>", "Next Buffer" },
-         p = { "<cmd>bp<cr>", "Previous Buffer" },
+      {
+         { "<leader>b", group = "Buffers" },
+         { "<leader>bb", "<cmd>Telescope buffers<cr>", desc = "List Buffers" },
+         { "<leader>bn", "<cmd>bn<cr>", desc = "Next Buffer" },
+         { "<leader>bp", "<cmd>bp<cr>", desc = "Previous Buffer" },
       },
-      g = {
-         name = "Git",
-         g = { "<cmd>LazyGit<cr>", "Open LazyGit" },
-         r = { "<cmd>Telescope live_grep<cr>", "Grep CWD" },
+      {
+         { "<leader>g", group = "Git" },
+         { "<leader>gg", "<cmd>LazyGit<cr>", desc = "Open LazyGit" },
+         { "<leader>gr", "<cmd>Telescope live_grep<cr>", desc = "Grep CWD" },
       },
-      t = {
-         name = "Terminal",
-         t = { "<cmd>ToggleTerm size=60 direction=vertical<cr>", "Toggle Term" },
+      {
+         { "<leader>t", group = "Terminal" },
+         { "<leader>t", "<cmd>ToggleTerm size=60 direction=vertical<cr>", desc = "Toggle Term" },
       },
-      ["<tab>"] = {
-         name = "Tabs",
-         n = { "<cmd>tabnew<cr><cmd>Telescope projects<cr>", "Open Project in New Tab" },
-         N = { "<cmd>tabnew<cr>", "Open New Tab" },
+      {
+         { "<leader><tab>", group = "Tabs" },
+         { "<leader><tab>n", "<cmd>tabnew<cr><cmd>Telescope projects<cr>", desc = "Open Project in New Tab" },
+         { "<leader><tab>N", "<cmd>tabnew<cr>", desc = "Open New Tab" },
       },
-      L = {
-         name = "Lazy Pacman",
-         L = { "<cmd>Lazy<cr>", "Open Lazy" },
-      },
-   }, { prefix = "<leader>" })
+      {
+         { "<leader>L", group = "Lazy Pacman" },
+         { "<leader>LL", "<cmd>Lazy<cr>", desc = "Open Lazy" },
+      }
+   })
 end
 
 return {

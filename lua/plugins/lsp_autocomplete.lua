@@ -31,39 +31,71 @@ local lsp_setup = function()
 
       local goto_preview = require("goto-preview")
       local wk = require("which-key")
-      wk.register({
-         l = {
-            name = "LSP: " .. client.name,
-            D = { function() goto_preview.goto_preview_definition() end, "Find Declaration" },
-            d = { function() vim.lsp.buf.definition() end, "Find Definition" },
-            k = { function() vim.lsp.buf.hover() end, "Show Hover Info" },
-            i = { function() vim.lsp.buf.implementation() end, "Find Implementation" },
-            I = { function() goto_preview.goto_preview_implementation() end, "Preview Implementation" },
-            c = { function() vim.lsp.buf.code_action() end, "Code Action(s)" },
-            r = { function() goto_preview.goto_preview_references() end, "Find References" },
-            R = { function() vim.lsp.buf.rename() end, "Rename Symbol" },
-            f = { function() vim.lsp.buf.format() end, "Format Buffer" },
-            P = { function() goto_preview.close_all_win() end, "Close Preview Windows" },
-            l = {
-               name = "Lenses",
-               c = { function() vim.lsp.codelens.clear() end, "Clear Lens" },
-               r = { function() vim.lsp.codelens.run() end, "Run Selected Lens" },
-               R = { function() vim.lsp.codelens.refresh() end, "Refresh Lens" },
-               d = { function() vim.lsp.codelens.display() end, "Display Lens" }
+      local lsp_server_name = "LSP: " .. client.name
+      wk.add({
+         mode = { "n" },
+         {
+            { "<leader>l", group = lsp_server_name },
+            { "<leader>lD", function() goto_preview.goto_preview_definition() end, desc = "Find Declaration" },
+            { "<leader>ld", function() vim.lsp.buf.definition() end, desc = "Find Definition" },
+            { "<leader>lk", function() vim.lsp.buf.hover() end, desc = "Show Hover Info" },
+            { "<leader>li", function() vim.lsp.buf.implementation() end, desc = "Find Implementation" },
+            { "<leader>lI", function() goto_preview.goto_preview_implementation() end, desc = "Preview Implementation" },
+            { "<leader>lc", function() vim.lsp.buf.code_action() end, desc = "Code Action(s)" },
+            { "<leader>lr", function() goto_preview.goto_preview_references() end, desc = "Find References" },
+            { "<leader>lR", function() vim.lsp.buf.rename() end,desc = "Rename Symbol" },
+            { "<leader>lf", function() vim.lsp.buf.format() end,desc = "Format Buffer" },
+            { "<leader>lP", function() goto_preview.close_all_win() end,  desc = "Close Preview Windows" },
+            {
+               { "<leader>ll", group = "Lenses" },
+               { "<leader>llc", function() vim.lsp.codelens.clear() end, desc = "Clear Lens" },
+               { "<leader>llr", function() vim.lsp.codelens.run() end, desc = "Run Selected Lens" },
+               { "<leader>llR", function() vim.lsp.codelens.refresh() end, desc = "Refresh Lens" },
+               { "<leader>lld", function() vim.lsp.codelens.display() end, desc = "Display Lens" },
             },
-            C = {
-               name = "Calls",
-               i = { function() vim.lsp.buf.incoming_calls() end, "Incoming Calls" },
-               o = { function() vim.lsp.buf.outgooing_calls() end, "Outgoing Calls" },
+            {
+               { "<leader>lC", group = "Calls" },
+               { "<leader>lCi", function() vim.lsp.buf.incoming_calls() end, desc = "Incoming Calls" },
+               { "<leader>lCo", function() vim.lsp.buf.outgooing_calls() end, desc = "Outgoing Calls" },
+               { "<leader>ln", group = "Navigation" },
+               { "<leader>lnn" ,  "", desc = "Navbuddy" },
             },
          },
-         n = {
-            name = "Navigation",
-            -- n = { function() navbuddy.open() end, "Navbuddy" },
-            n = { "" , "Navbuddy" },
-         },
-      }, bufopts)
+      })
    end
+   --   wk.register({
+   --      l = {
+   --         name = "LSP: " .. client.name,
+   --         D = { function() goto_preview.goto_preview_definition() end, "Find Declaration" },
+   --         d = { function() vim.lsp.buf.definition() end, "Find Definition" },
+   --         k = { function() vim.lsp.buf.hover() end, "Show Hover Info" },
+   --         i = { function() vim.lsp.buf.implementation() end, "Find Implementation" },
+   --         I = { function() goto_preview.goto_preview_implementation() end, "Preview Implementation" },
+   --         c = { function() vim.lsp.buf.code_action() end, "Code Action(s)" },
+   --         r = { function() goto_preview.goto_preview_references() end, "Find References" },
+   --         R = { function() vim.lsp.buf.rename() end, "Rename Symbol" },
+   --         f = { function() vim.lsp.buf.format() end, "Format Buffer" },
+   --         P = { function() goto_preview.close_all_win() end, "Close Preview Windows" },
+   --         l = {
+   --            name = "Lenses",
+   --            c = { function() vim.lsp.codelens.clear() end, "Clear Lens" },
+   --            r = { function() vim.lsp.codelens.run() end, "Run Selected Lens" },
+   --            R = { function() vim.lsp.codelens.refresh() end, "Refresh Lens" },
+   --            d = { function() vim.lsp.codelens.display() end, "Display Lens" }
+   --         },
+   --         C = {
+   --            name = "Calls",
+   --            i = { function() vim.lsp.buf.incoming_calls() end, "Incoming Calls" },
+   --            o = { function() vim.lsp.buf.outgooing_calls() end, "Outgoing Calls" },
+   --         },
+   --      },
+   --      n = {
+   --         name = "Navigation",
+   --         -- n = { function() navbuddy.open() end, "Navbuddy" },
+   --         n = { "" , "Navbuddy" },
+   --      },
+   --   }, bufopts)
+   --end
 
    local lsp_flags = {
       debounce_text_changes = 150,
