@@ -59,7 +59,7 @@ local default_mappings = function()
       },
       {
          { "<leader>t", group = "Terminal" },
-         { "<leader>t", "<cmd>ToggleTerm size=60 direction=vertical<cr>", desc = "Toggle Term" },
+         { "<leader>tt", "<cmd>ToggleTerm size=60 direction=vertical<cr>", desc = "Toggle Term" },
       },
       {
          { "<leader><tab>", group = "Tabs" },
@@ -80,6 +80,4 @@ return {
       priority = 1000,
       init = default_mappings,
    },
-
-   "anuvyklack/hydra.nvim",
 }

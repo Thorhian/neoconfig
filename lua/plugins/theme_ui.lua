@@ -24,7 +24,7 @@ local lualine_setup = function()
             }
          },
          lualine_b = { 'branch', 'diff', 'diagnostics' },
-         lualine_c = { require("noice").api.status.mode.get },
+         --lualine_c = { require("noice").api.status.mode.get },
          lualine_x = { 'encoding', 'fileformat', 'filetype' },
          lualine_y = { 'progress' },
          lualine_z = { 'location' }
@@ -53,26 +53,26 @@ end
 -----------------------------------------------------------
 
 --------- Ice? Noice! -------------------------------------
-local noice_config = function()
-   require("noice").setup({
-      lsp = {
-         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-         override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
-         },
-      },
-      -- you can enable a preset for easier configuration
-      presets = {
-         bottom_search = true,         -- use a classic bottom cmdline for search
-         command_palette = true,       -- position the cmdline and popupmenu together
-         long_message_to_split = true, -- long messages will be sent to a split
-         inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-         lsp_doc_border = false,       -- add a border to hover docs and signature help
-      },
-   })
-end
+--local noice_config = function()
+--   require("noice").setup({
+--      lsp = {
+--         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+--         override = {
+--            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+--            ["vim.lsp.util.stylize_markdown"] = true,
+--            ["cmp.entry.get_documentation"] = true,
+--         },
+--      },
+--      -- you can enable a preset for easier configuration
+--      presets = {
+--         bottom_search = true,         -- use a classic bottom cmdline for search
+--         command_palette = true,       -- position the cmdline and popupmenu together
+--         long_message_to_split = true, -- long messages will be sent to a split
+--         inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+--         lsp_doc_border = false,       -- add a border to hover docs and signature help
+--      },
+--   })
+--end
 -----------------------------------------------------------
 
 --------- Tabline Via Tabby -------------------------------
@@ -147,7 +147,7 @@ return {
    {
       "nvim-lualine/lualine.nvim",
       depedencies = {
-         "folke/noice.nvim"
+         --"folke/noice.nvim"
       },
       config = lualine_setup
    },
@@ -160,13 +160,6 @@ return {
    },
 
    {
-      "lewis6991/gitsigns.nvim",
-      config = function()
-         require("gitsigns").setup()
-      end
-   },
-
-   {
       "goolord/alpha-nvim",
       config = function()
          require("alpha").setup(require("alpha.themes.dashboard").config)
@@ -175,17 +168,17 @@ return {
 
    { "MunifTanjim/nui.nvim" },
 
-   {
-      "folke/noice.nvim",
-      opts = {},
-      depedencies = {
-         "MunifTanjim/nui.nvim",
-         "rcarriga/nvim-notify",
-      },
-      init = noice_config,
-      lazy = false,
-      priority = 2000,
-   },
+   --{
+   --   "folke/noice.nvim",
+   --   opts = {},
+   --   depedencies = {
+   --      "MunifTanjim/nui.nvim",
+   --      "rcarriga/nvim-notify",
+   --   },
+   --   init = noice_config,
+   --   lazy = false,
+   --   priority = 2000,
+   --},
 
    {
       "nanozuki/tabby.nvim",

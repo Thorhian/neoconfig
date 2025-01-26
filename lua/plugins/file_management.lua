@@ -15,6 +15,30 @@ local ranger_setup = function()
 end
 -----------------------------------------------------------
 
+--------- Oil File Browser --------------------------------
+local oil_setup = function ()
+   local oil = require("oil")
+   oil.setup({
+      -- Don't hide hidden files please :P
+      view_options = {
+         show_hidden = true,
+      },
+
+      columns = {
+         "icon",
+      },
+
+      watch_for_changes = true,
+   })
+
+   local wk = require("which-key")
+   wk.add({
+      mode = { "n" },
+      { "<leader>fo", "<cmd>Oil<cr>", desc = "Open Oil File Browser" }
+   })
+end
+-----------------------------------------------------------
+
 return {
    {
       "kelly-lin/ranger.nvim",
@@ -24,12 +48,6 @@ return {
    {
       "stevearc/oil.nvim",
       opts = {},
-      init = function()
-         require("oil").setup({
-            view_options = {
-               show_hidden = true,
-            }
-         })
-      end,
+      init = oil_setup
    }
 }

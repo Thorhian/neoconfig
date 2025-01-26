@@ -50,14 +50,25 @@ local dap_config = function()
    --      { "o", "<cmd>DapStepOut<cr>" },
    --   }
    --})
+
+   local hydra_step = function()
+      wk.show({
+         keys = "<leader>ds",
+         loop = true,
+         desc = "Gaben",
+      })
+   end
+
    wk.add({
       mode = { "n" },
       { "<leader>d", group = "Debugging" },
       { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "Toggle Breakpoint" },
-      { "<leader>di", "<cmd>DapStepInto<cr>", desc = "Step Into" },
-      { "<leader>do", "<cmd>DapStepOut<cr>", desc = "Step Out" },
-      { "<leader>ds", "<cmd>DapStepOver<cr>", desc = "Step Over" },
       { "<leader>dc", "<cmd>DapContinue<cr>", desc = "Continue" },
+      { "<leader>dh", hydra_step, desc = "Hydra Stepping" },
+      { "<leader>ds", "<cmd>DapStepInto<cr>", group = "Stepping"},
+      { "<leader>dsi", "<cmd>DapStepInto<cr>", desc = "Step Into" },
+      { "<leader>dso", "<cmd>DapStepOut<cr>", desc = "Step Out" },
+      { "<leader>dss", "<cmd>DapStepOver<cr>", desc = "Step Over" },
       { "<leader>dt", function() dapUI.toggle() end, desc = "Toggle Dap UI" },
       { "<leader>dr", function()
          dapVScode.load_launchjs(nil, { cppdbg = { "rust", "c", "cpp", "h", "hpp" } })
