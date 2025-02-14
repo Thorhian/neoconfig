@@ -9,6 +9,8 @@ local gitsigns_config = function()
       { "<leader>gs", function() gitsigns.stage_hunk() end, desc = "Stage/Unstage Hunk" },
       { "<leader>gS", function() gitsigns.stage_buffer() end, desc = "Stage Buffer" },
       { "<leader>gd", function() gitsigns.diffthis() end, desc = "Diff This Buffer" },
+      { "<leader>gb", function() gitsigns.blame_line() end, desc = "Blame This Line" },
+      { "<leader>gB", function() gitsigns.blame() end, desc = "Blame This Buffer" },
    })
 end
 -----------------------------------------------------------
