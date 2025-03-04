@@ -69,6 +69,10 @@ local default_mappings = function()
       {
          { "<leader>L", group = "Lazy Pacman" },
          { "<leader>LL", "<cmd>Lazy<cr>", desc = "Open Lazy" },
+      },
+      {
+         { "<leader>z", group = "Zen Mode" },
+         { "<leader>zz", function() Snacks.zen() end, desc = "Standard Zen" }
       }
    })
 end
@@ -77,7 +81,7 @@ return {
    {
       "folke/which-key.nvim",
       lazy = false,
-      priority = 1000,
+      priority = 1200,
       init = default_mappings,
    },
 }
