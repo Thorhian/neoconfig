@@ -72,7 +72,8 @@ local default_mappings = function()
       },
       {
          { "<leader>z", group = "Zen Mode" },
-         { "<leader>zz", function() Snacks.zen() end, desc = "Standard Zen" }
+         { "<leader>zz", function() Snacks.zen() end, desc = "Standard Zen" },
+         { "<leader>zZ", function() Snacks.zen.zoom() end, desc = "Zoom" }
       }
    })
 end
