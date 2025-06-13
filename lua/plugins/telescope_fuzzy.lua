@@ -25,7 +25,7 @@ local telescope_table = {
 
 local telescope_function = function()
    require("telescope").setup(telescope_table)
-   require("telescope").load_extension("fzf")
+   --require("telescope").load_extension("fzf")
    require("telescope").load_extension("projects")
 end
 
@@ -33,10 +33,10 @@ return {
    {
       "nvim-telescope/telescope.nvim",
       dependencies = {
-         {
-            "nvim-telescope/telescope-fzf-native.nvim",
-            build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build"
-         },
+         --{
+         --   "nvim-telescope/telescope-fzf-native.nvim",
+         --   build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build"
+         --},
          { "nvim-telescope/telescope-symbols.nvim" },
          {
             "ahmedkhalf/project.nvim",
