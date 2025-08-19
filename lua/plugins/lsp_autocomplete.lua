@@ -318,6 +318,12 @@ return {
       "neovim/nvim-lspconfig",
       dependencies = {
          {
+            "williamboman/mason.nvim",
+            init = function()
+               require("mason").setup()
+            end,
+         },
+         {
             "rmagatti/goto-preview",
             init = function()
                require("goto-preview").setup()
@@ -358,10 +364,4 @@ return {
    { "hrsh7th/cmp-nvim-lsp" },
    { "saadparwaiz1/cmp_luasnip" },
    { "L3MON4D3/LuaSnip" },
-   {
-      "williamboman/mason.nvim",
-      init = function()
-         require("mason").setup()
-      end,
-   },
 }

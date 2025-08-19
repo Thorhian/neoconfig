@@ -39,6 +39,7 @@ return {
             git_signs = false,
             mini_diff_signs = true
          },
-      }
+      },
+      notify = { enabled = true },
    }
 }
