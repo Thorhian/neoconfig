@@ -123,9 +123,11 @@ local lsp_setup = function()
    }
    vim.lsp.enable("pyright", true)
 
+   local lua_ls_path = masonPackageLoc .. "/lua-language-server/lua-language-server"
    vim.lsp.config.lua_ls = {
       on_attach = on_attach,
       flags = lsp_flags,
+      cmd = { lua_ls_path },
       capabilities = capabilities,
       settings = {
          Lua = {
@@ -351,4 +353,8 @@ return {
 
    { "microsoft/python-type-stubs", lazy = true},
    { "L3MON4D3/LuaSnip" },
+   {
+      "folke/lazydev.nvim",
+      ft = "lua"
+   },
 }
