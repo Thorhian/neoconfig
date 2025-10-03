@@ -35,11 +35,10 @@ local treesitter_setup = function()
 end
 
 return {
-   { "jiangmiao/auto-pairs" },
    { "lukas-reineke/indent-blankline.nvim" },
    { "folke/which-key.nvim" },
-   { "jiangmiao/auto-pairs" },
-   { 
+   { "windwp/nvim-autopairs", event = "InsertEnter", config = true },
+   {
       "nvim-treesitter/nvim-treesitter",
       build = ":TSUpdate",
       dependencies = "windwp/nvim-ts-autotag",

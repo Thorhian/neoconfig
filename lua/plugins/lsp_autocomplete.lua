@@ -102,11 +102,9 @@ local lsp_setup = function()
    }
 
    local capabilities = vim.lsp.protocol.make_client_capabilities()
-   capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+   --capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-   local lspconfig = require("lspconfig")
-
-   lspconfig.pyright.setup{
+   vim.lsp.config.pyright = {
       before_init = function(_, config)
          --local stub_path = _G.join_paths(
          --    _G.get_runtime_dir(),
@@ -123,8 +121,9 @@ local lsp_setup = function()
       on_attach = on_attach,
       flags = lsp_flags,
    }
+   vim.lsp.enable("pyright", true)
 
-   lspconfig.lua_ls.setup {
+   vim.lsp.config.lua_ls = {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
@@ -149,18 +148,20 @@ local lsp_setup = function()
          },
       },
    }
+   vim.lsp.enable("lua_ls", true)
 
    -- Configure Elixir LS
    local els_unexpanded_dir = "/elixir-ls/language_server.sh"
    local elixirLS_dir = masonPackageLoc .. els_unexpanded_dir
-   lspconfig.elixirls.setup{
+   vim.lsp.config.elixirls = {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
       cmd = { elixirLS_dir },
    }
+   vim.lsp.enable("elixirls", true)
 
-   lspconfig.tailwindcss.setup {
+   vim.lsp.config.tailwindcss = {
       init_options = {
          userlanguages = {
             eelixir = "html-eex",
@@ -205,8 +206,9 @@ local lsp_setup = function()
       flags = lsp_flags,
       capabilities = capabilities,
    }
+   vim.lsp.enable("tailwindcss", true)
 
-   lspconfig.rust_analyzer.setup({
+   vim.lsp.config.rust_analyzer = {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
@@ -217,15 +219,17 @@ local lsp_setup = function()
             }
          }
       }
-   })
+   }
+   vim.lsp.enable("rust_analyzer", true)
 
-   lspconfig.gdscript.setup {
+   vim.lsp.config.gdscript = {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
    }
+   vim.lsp.enable("gdscript", true)
 
-   lspconfig.clangd.setup {
+   vim.lsp.config.clangd = {
       on_attach = function(client, bufnr)
          local bufopts = { silent=true, buffer=bufnr, prefix="<leader>" }
          local wk = require("which-key")
@@ -241,15 +245,17 @@ local lsp_setup = function()
       flags = lsp_flags,
       capabilities = capabilities,
    }
+   vim.lsp.enable("clangd", true)
 
-   lspconfig.zls.setup({
+   vim.lsp.config.zls = {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
-   })
+   }
+   vim.lsp.enable("zls", true)
 
    omnisharp_loc = masonPackageLoc .. "/omnisharp/omnisharp.cmd"
-   lspconfig.omnisharp.setup {
+   vim.lsp.config.omnisharp = {
       cmd = { omnisharp_loc },
       on_attach = on_attach,
       capabilities = capabilities,
@@ -258,59 +264,15 @@ local lsp_setup = function()
       enable_ms_build_load_projects_on_demand = false,
       enable_roslyn_analyzers = false,
    }
+   vim.lsp.enable("omnisharp", true)
 
-   lspconfig.arduino_language_server.setup {
+   vim.lsp.config.arduino_language_server = {
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
    }
-end
+   vim.lsp.enable("arduino_language_server", true)
 
--- CMP/Luasnip Conifiguration -----------------------------
-
-local cmp_setup = function()
-   local luasnip = require("luasnip")
-   local cmp = require("cmp")
-   cmp.setup({
-      snippet = {
-         expand = function(args)
-            luasnip.lsp_expand(args.body)
-         end,
-      },
-      mapping = cmp.mapping.preset.insert({
-         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-         ['<C-f>'] = cmp.mapping.scroll_docs(4),
-         ['<C-Space>'] = cmp.mapping.complete(),
-         ['<CR>'] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-         },
-         ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-               cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-               luasnip.expand_or_jump()
-            else
-               fallback()
-            end
-         end, { 'i', 's' }),
-         ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-               cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-               luasnip.jump(-1)
-            else
-               fallback()
-            end
-         end, { 'i', 's' }),
-      }),
-      sources = {
-         { name = 'nvim_lsp' },
-         { name = 'luasnip' },
-         { name = 'neorg' },
-         { name = 'path' },
-      },
-   })
 end
 
 return {
@@ -351,17 +313,42 @@ return {
    },
 
    {
-      "hrsh7th/nvim-cmp",
-      dependencies = {
-         { "hrsh7th/cmp-nvim-lsp" },
-         { "saadparwaiz1/cmp_luasnip" },
-         { "L3MON4D3/LuaSnip" },
+      "saghen/blink.cmp",
+      dependencies = { "rafamadriz/friendly-snippets" },
+      version = "1.*",
+
+      ---@module 'blink.cmp'
+      ---@type blink.cmp.Config
+      opts = {
+         keymap = {
+            preset = "enter",
+
+            ['<Tab>'] = { "select_next", "fallback" },
+            ['<S-Tab>'] = { "select_prev", "fallback" },
+         },
+
+         appearance = {
+            nerd_font_variant = "mono"
+         },
+
+         completion = {
+            documentation = { auto_show = true },
+            accept = {
+               auto_brackets = { enabled = true },
+            },
+         },
+
+         signature = { enabled = true },
+
+         sources = {
+            default = { "lsp", "path", "snippets", "buffer" },
+         },
+
+         fuzzy = { implementation = "prefer_rust_with_warning" }
       },
-      init = cmp_setup,
+      opts_extend = { "source.default" }
    },
 
    { "microsoft/python-type-stubs", lazy = true},
-   { "hrsh7th/cmp-nvim-lsp" },
-   { "saadparwaiz1/cmp_luasnip" },
    { "L3MON4D3/LuaSnip" },
 }
