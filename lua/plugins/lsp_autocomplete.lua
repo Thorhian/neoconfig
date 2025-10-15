@@ -1,10 +1,8 @@
 -- LSP/AutoCompletion & DAP -------------------------------
 local lsp_setup = function()
-   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-      vim.lsp.diagnostic.on_publish_diagnostics, {
-         update_in_insert = true,
-      }
-   )
+   vim.diagnostic.config({
+      update_in_insert = true
+   })
 
    local os_type = vim.loop.os_uname().sysname
    local homeDir = os.getenv("HOME")
@@ -101,27 +99,34 @@ local lsp_setup = function()
       debounce_text_changes = 150,
    }
 
-   local capabilities = vim.lsp.protocol.make_client_capabilities()
-   --capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+   local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-   vim.lsp.config.pyright = {
-      before_init = function(_, config)
-         --local stub_path = _G.join_paths(
-         --    _G.get_runtime_dir(),
-         --    "site",
-         --    "pack",
-         --    "packer",
-         --    "opt",
-         --    "python-type-stubs"
-         --)
-         --print(stub_path)
-         local stubs = vim.fn.stdpath("data") .. "/site/pack/packer/opt/python-type-stubs"
-         config.settings.python.analysis.stubPath = stubs
-      end,
+   vim.lsp.config.basedpyright = {
+      filetypes = { "python" },
       on_attach = on_attach,
       flags = lsp_flags,
    }
-   vim.lsp.enable("pyright", true)
+   vim.lsp.enable("basedpyright", true)
+
+   --vim.lsp.config.pyright = {
+   --   before_init = function(_, config)
+   --      --local stub_path = _G.join_paths(
+   --      --    _G.get_runtime_dir(),
+   --      --    "site",
+   --      --    "pack",
+   --      --    "packer",
+   --      --    "opt",
+   --      --    "python-type-stubs"
+   --      --)
+   --      --print(stub_path)
+   --      local stubs = vim.fn.stdpath("data") .. "/site/pack/packer/opt/python-type-stubs"
+   --      config.settings.python.analysis.stubPath = stubs
+   --   end,
+   --   filetypes = { "python" },
+   --   on_attach = on_attach,
+   --   flags = lsp_flags,
+   --}
+   --vim.lsp.enable("pyright", true)
 
    local lua_ls_path = masonPackageLoc .. "/lua-language-server/lua-language-server"
    vim.lsp.config.lua_ls = {
@@ -129,6 +134,7 @@ local lsp_setup = function()
       flags = lsp_flags,
       cmd = { lua_ls_path },
       capabilities = capabilities,
+      filetypes = { "lua" },
       settings = {
          Lua = {
             runtime = {
@@ -157,6 +163,7 @@ local lsp_setup = function()
    local elixirLS_dir = masonPackageLoc .. els_unexpanded_dir
    vim.lsp.config.elixirls = {
       on_attach = on_attach,
+      filetypes = { "elixir", "heex"},
       flags = lsp_flags,
       capabilities = capabilities,
       cmd = { elixirLS_dir },
@@ -185,6 +192,7 @@ local lsp_setup = function()
       --         vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id})
       --     end,
       --},
+      filetypes = { "heex", "html", "elixir" },
       settings = {
          tailwindCSS = {
             lint = {
@@ -214,6 +222,7 @@ local lsp_setup = function()
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
+      filetypes = { "rust" },
       settings = {
          ["rust-analyzer"] = {
             diagnostics = {
@@ -227,6 +236,7 @@ local lsp_setup = function()
    vim.lsp.config.gdscript = {
       on_attach = on_attach,
       flags = lsp_flags,
+      filetypes = { "gdscript" },
       capabilities = capabilities,
    }
    vim.lsp.enable("gdscript", true)
@@ -245,6 +255,7 @@ local lsp_setup = function()
          on_attach(client, bufnr)
       end,
       flags = lsp_flags,
+      filetypes = { "c", "cpp" },
       capabilities = capabilities,
    }
    vim.lsp.enable("clangd", true)
@@ -253,6 +264,7 @@ local lsp_setup = function()
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
+      filetypes = { "zig" },
    }
    vim.lsp.enable("zls", true)
 
@@ -265,6 +277,7 @@ local lsp_setup = function()
       enable_editorconfig_support = true,
       enable_ms_build_load_projects_on_demand = false,
       enable_roslyn_analyzers = false,
+      filetypes = { "cs" },
    }
    vim.lsp.enable("omnisharp", true)
 
@@ -273,7 +286,6 @@ local lsp_setup = function()
       flags = lsp_flags,
       capabilities = capabilities,
    }
-   vim.lsp.enable("arduino_language_server", true)
 
 end
 
@@ -353,8 +365,4 @@ return {
 
    { "microsoft/python-type-stubs", lazy = true},
    { "L3MON4D3/LuaSnip" },
-   {
-      "folke/lazydev.nvim",
-      ft = "lua"
-   },
 }
