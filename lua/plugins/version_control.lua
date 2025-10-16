@@ -11,6 +11,10 @@ local gitsigns_config = function()
       { "<leader>gd", function() gitsigns.diffthis() end, desc = "Diff This Buffer" },
       { "<leader>gb", function() gitsigns.blame_line() end, desc = "Blame This Line" },
       { "<leader>gB", function() gitsigns.blame() end, desc = "Blame This Buffer" },
+      { "<leader>gl", function() gitsigns.nav_hunk("next") end, desc = "Goto next hunk" },
+      { "<leader>gH", function() gitsigns.nav_hunk("last") end, desc = "Goto last hunk" },
+      { "<leader>gh", function() gitsigns.nav_hunk("prev") end, desc = "Goto previous hunk" },
+      { "<leader>gH", function() gitsigns.nav_hunk("first") end, desc = "Goto first hunk" },
    })
 end
 -----------------------------------------------------------
