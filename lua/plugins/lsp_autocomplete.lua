@@ -218,20 +218,22 @@ local lsp_setup = function()
    }
    vim.lsp.enable("tailwindcss", true)
 
-   vim.lsp.config.rust_analyzer = {
-      on_attach = on_attach,
-      flags = lsp_flags,
-      capabilities = capabilities,
-      filetypes = { "rust" },
-      settings = {
-         ["rust-analyzer"] = {
-            diagnostics = {
-               enable = false,
-            }
-         }
-      }
-   }
-   vim.lsp.enable("rust_analyzer", true)
+   --#region Rust
+   vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function(ev)
+         local client = vim.lsp.get_client_by_id(ev.data.client_id)
+         local buf = ev.buf
+         if client == nil then
+            return
+         end
+
+         if client.name == "rust-analyzer" then
+            vim.print("We are working people!")
+            on_attach(client, buf)
+         end
+      end
+   })
+   --#end
 
    vim.lsp.config.gdscript = {
       on_attach = on_attach,
@@ -304,6 +306,11 @@ return {
             init = function()
                require("goto-preview").setup()
             end
+         },
+         {
+            'mrcjkb/rustaceanvim',
+            version = '^6',
+            lazy = false,
          },
          {
             "nvimdev/lspsaga.nvim",
