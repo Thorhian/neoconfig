@@ -300,13 +300,12 @@ local dapUI_config = function()
    require("dapui").setup({
       icons = { expanded = "", collapsed = "", current_frame = "" },
       mappings = {
-         -- Use a table to apply multiple mappings
+         edit = "e",
          expand = { "<CR>", "<2-LeftMouse>" },
          open = "o",
          remove = "d",
-         edit = "e",
          repl = "r",
-         toggle = "t",
+         toggle = "t"
       },
       -- Use this to override mappings for specific elements
       element_mappings = {
@@ -329,22 +328,21 @@ local dapUI_config = function()
       layouts = {
          {
             elements = {
+               "console",
+               "stacks",
+            },
+            size = 0.30, -- 25% of total lines
+            position = "bottom",
+         },
+         {
+            elements = {
                -- Elements can be strings or table with id and size keys.
                { id = "scopes", size = 0.25 },
                "breakpoints",
-               -- "stacks",
                "watches",
             },
             size = 40, -- 40 columns
             position = "left",
-         },
-         {
-            elements = {
-               "repl",
-               "console",
-            },
-            size = 0.25, -- 25% of total lines
-            position = "bottom",
          },
       },
       controls = {
@@ -374,6 +372,7 @@ local dapUI_config = function()
       force_buffers = true,
       windows = { indent = 1 },
       render = {
+         indent = 1,
          max_type_length = nil, -- Can be integer or nil.
          max_value_lines = 100, -- Can be integer or nil.
       }
