@@ -105,8 +105,17 @@ local lsp_setup = function()
       filetypes = { "python" },
       on_attach = on_attach,
       flags = lsp_flags,
+      capabilities = capabilities,
    }
    vim.lsp.enable("basedpyright", true)
+
+   vim.lsp.config.kotlin_language_server = {
+      filetypes = { "kotlin" },
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+   }
+   vim.lsp.enable("kotlin_language_server")
 
    --vim.lsp.config.pyright = {
    --   before_init = function(_, config)
@@ -259,6 +268,8 @@ local lsp_setup = function()
       capabilities = capabilities,
    }
    vim.lsp.enable("clangd", true)
+
+   vim.lsp.enable("neocmake")
 
    vim.lsp.config.zls = {
       on_attach = on_attach,
