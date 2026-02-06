@@ -31,7 +31,7 @@ local dap_config = function()
 
    local dap = require("dap")
    local dapVScode = require("dap.ext.vscode")
-   local dapUI = require("dapui")
+   --local dapUI = require("dapui")
    local wk = require("which-key")
    --local hydra = require("hydra")
 
@@ -69,7 +69,8 @@ local dap_config = function()
       { "<leader>dsi", "<cmd>DapStepInto<cr>", desc = "Step Into" },
       { "<leader>dso", "<cmd>DapStepOut<cr>", desc = "Step Out" },
       { "<leader>dss", "<cmd>DapStepOver<cr>", desc = "Step Over" },
-      { "<leader>dt", function() dapUI.toggle() end, desc = "Toggle Dap UI" },
+      --{ "<leader>dt", function() dapUI.toggle() end, desc = "Toggle Dap UI" },
+      { "<leader>dt", "<cmd>DapViewOpen<cr>", desc = "Toggle Dap View" },
       { "<leader>dr", function()
          dapVScode.load_launchjs(nil, { cppdbg = { "rust", "c", "cpp", "h", "hpp" } })
       end, desc = "Load .vscode/launch.json" }
@@ -389,12 +390,20 @@ return {
    {
       "mfussenegger/nvim-dap",
       dependencies = {
+         --{
+         --   "rcarriga/nvim-dap-ui",
+         --   dependencies = {
+         --      "mfussenegger/nvim-dap"
+         --   },
+         --   init = dapUI_config,
+         --},
          {
-            "rcarriga/nvim-dap-ui",
-            dependencies = {
-               "mfussenegger/nvim-dap"
-            },
-            init = dapUI_config,
+            "igorlfs/nvim-dap-view",
+            -- let the plugin lazy load itself
+            lazy = false,
+            ---@module 'dap-view'
+            ---@type dapview.Config
+            opts = {},
          },
 
          {
