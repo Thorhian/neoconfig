@@ -281,6 +281,14 @@ local lsp_setup = function()
    }
    vim.lsp.enable("zls", true)
 
+   vim.lsp.config.ols = {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      filetypes = { "odin" },
+   }
+   vim.lsp.enable("ols", true)
+
    omnisharp_loc = masonPackageLoc .. "/omnisharp/omnisharp.cmd"
    vim.lsp.config.omnisharp = {
       cmd = { omnisharp_loc },
