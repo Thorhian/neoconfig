@@ -30,4 +30,4 @@ end
 
 toggleTestFloat()
 
-vim.api.nvim_create_user_command("testFloat", toggleTestFloat, {})
+vim.api.nvim_create_user_command("TestFloat", toggleTestFloat, {})
