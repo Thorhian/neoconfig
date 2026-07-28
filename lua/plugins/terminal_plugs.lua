@@ -7,6 +7,7 @@ return {
             hide_numbers = true,
             auto_scroll = true,
             open_mapping = [[<c-\>]],
+            direction = "float",
          })
       end
    },
