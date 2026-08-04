@@ -97,7 +97,7 @@ local dap_config = function()
       return false
    end
 
-   function get_lsp_workfolder(langs)
+   function get_lsp_workfolder(lang)
       local clients = vim.lsp.get_clients({bufnr = 0})
       if clients == nil then
          return "${workspaceFolder}"
@@ -106,33 +106,31 @@ local dap_config = function()
       local chosenLang = nil
       local chosenClient = nil
       for _, client in pairs(clients) do
-         for _, lang in pairs(langs) do
-            if table.contains(client.config.filetypes, lang) then
-               chosenLang = lang
-               chosenClient = client
-               break
-            end
+         if table.contains(client.config.filetypes, lang) then
+            chosenLang = lang
+            chosenClient = client
+            break
          end
          if chosenLang ~= nil then
             break
          end
       end
 
-      if chosenLang == "rust" then
+      if chosenClient ~= nil then
          return chosenClient.root_dir
       end
 
       return "${workspaceFolder}"
    end
 
-   function ExecutableFinder()
+   function ExecutableFinder(lang)
       return coroutine.create(function(coro)
          local opts = {}
-         local workfolder = get_lsp_workfolder({"rust"})
+         local workfolder = get_lsp_workfolder(lang)
          pickers.new(
             opts,
             {
-               prompt_title = string.format("Path to Executable"),
+               prompt_title = string.format("Path to Executable (" .. workfolder .. ")"),
                finder = finders.new_oneshot_job({ "fd", "--hidden", "--no-ignore", "--type=x", ".", "\"", workfolder, "\"" }),
                sorter = conf.generic_sorter(opts),
                attach_mappings = function(buffer_number)
@@ -155,7 +153,9 @@ local dap_config = function()
             type = "gdb",
             request = "launch",
             cwd = "${workspaceFolder}",
-            program = ExecutableFinder,
+            program = function()
+               return ExecutableFinder("cpp")
+            end,
          },
          {
             name = "Attach to gdbserver :1234",
@@ -163,27 +163,33 @@ local dap_config = function()
             request = "attach",
             target = "localhost:1234",
             cwd = "${workspaceFolder}",
-            program = ExecutableFinder,
+            program = function()
+               return ExecutableFinder("cpp")
+            end,
          },
       }
    else
       dap.configurations.cpp = {
          {
             name = "Launch file",
-            type = "cppdbg",
+            type = "codelldb",
             request = "launch",
             cwd = "${workspaceFolder}",
-            program = ExecutableFinder,
+            program = function()
+               return ExecutableFinder("cpp")
+            end,
          },
          {
             name = "Attach to gdbserver :1234",
-            type = "cppdbg",
+            type = "codelldb",
             request = "launch",
-            MIMode = "gdb",
+            MIMode = "codelldb",
             miDebuggerServerAddress = "localhost:1234",
             miDebuggerPath = "/usr/bin/gdb",
             cwd = "${workspaceFolder}",
-            program = ExecutableFinder,
+            program = function()
+               return ExecutableFinder("cpp")
+            end,
          },
       }
    end
