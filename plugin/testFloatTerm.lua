@@ -28,6 +28,4 @@ local toggleTestFloat = function()
    print(state)
 end
 
-toggleTestFloat()
-
 vim.api.nvim_create_user_command("TestFloat", toggleTestFloat, {})
