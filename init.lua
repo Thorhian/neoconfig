@@ -1,6 +1,5 @@
 vim.cmd [[
-    syntax enable
-    set autochdir
+    set noautochdir
     set completeopt=menu,menuone,noselect
     set nocompatible
     set showmatch
@@ -17,6 +16,7 @@ vim.cmd [[
     filetype plugin indent on
     set ttyfast
     set nowrap
+    set foldlevelstart=99
     tnoremap \\\ <C-\><C-n>
 
     let g:db_ui_use_nerd_fonts = 1
