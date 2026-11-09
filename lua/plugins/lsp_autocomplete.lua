@@ -252,24 +252,29 @@ local lsp_setup = function()
    }
    vim.lsp.enable("gdscript", true)
 
-   vim.lsp.config.clangd = {
-      on_attach = function(client, bufnr)
+   vim.lsp.config("clangd", {
+         on_attach = function(client, bufnr)
          local bufopts = { silent=true, buffer=bufnr, prefix="<leader>" }
          local wk = require("which-key")
          wk.register({
-            c = {
+               c = {
                name = "clangd",
                k = { "<cmd>ClangdSwitchSourceHeader<cr>" , "Swap to Header/Source" },
-            },
-         }, bufopts)
+               },
+               }, bufopts)
 
          on_attach(client, bufnr)
-      end,
-      flags = lsp_flags,
-      filetypes = { "c", "cpp" },
-      capabilities = capabilities,
-   }
+         end,
+         flags = lsp_flags,
+         capabilities = capabilities,
+         })
    vim.lsp.enable("clangd", true)
+
+   vim.lsp.config("ols", {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities
+   })
 
    vim.lsp.enable("neocmake")
 
